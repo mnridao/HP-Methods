@@ -5,7 +5,7 @@ class ImagePointAdvector:
     """ 
     Image point method, with or without nudging."""
 
-    def __init__(self, x_ref: np.ndarray, force: Callable[[np.ndarray], np.ndarray], 
+    def __init__(self, x_ref: np.ndarray, force_ref: Callable[[np.ndarray], np.ndarray], 
                  N: int, eta: Optional[float]=None, nudge: Optional[bool]=False):
         """ 
         Args: 
@@ -18,7 +18,7 @@ class ImagePointAdvector:
         
         self.N = N
         self.x_ref = x_ref
-        self.force = force
+        self.force_ref = force_ref
         
         # Nudging parameters.
         self.eta = eta
@@ -32,7 +32,7 @@ class ImagePointAdvector:
         x_neighbours = self._nearest_neighbours(y)
         
         # Average force in the neighbourhood.
-        f_avg = np.sum(self.force(x_neighbours), axis=0)/self.N
+        f_avg = np.sum(self.force_ref(x_neighbours), axis=0)/self.N
         
         if self.nudge and self.eta is not None:
             nudge_term = self.eta*np.sum(x_neighbours - y, axis=0)/self.N
